@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
-
+import Modal from "./Modal";
+import MessageIcon from '@mui/icons-material/Message';
 const Friend = ({ friendId, name, subtitle, userPicturePath, age }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -66,6 +67,21 @@ const Friend = ({ friendId, name, subtitle, userPicturePath, age }) => {
 
             </FlexBetween>
             <Box>{Age}</Box>
+            <Modal>
+                <Modal.Open opens={_id}>
+                    <IconButton
+
+                        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+                    >
+
+                        <MessageIcon sx={{ color: primaryDark }} />
+                    </IconButton>
+                </Modal.Open>
+                <Modal.Window name={_id}>
+                    <div>{name}</div>
+                </Modal.Window>
+            </Modal>
+
             <IconButton
                 onClick={() => patchFriend()}
                 sx={{ backgroundColor: primaryLight, p: "0.6rem" }}

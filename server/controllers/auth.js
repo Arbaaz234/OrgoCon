@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import Recipient from "../models/Recipient.js";
+// import Recipient from "../models/Recipient.js";
 
 export const register = async (req, res) => {
     try {
@@ -48,50 +48,50 @@ export const register = async (req, res) => {
     }
 }
 
-export const registerR = async (req, res) => {
-    try {
-        const {
-            firstName,
-            lastName,
-            email,
-            password,
-            picturePath,
-            friends,
-            location,
-            occupation,
-            bloodgroup,
-            requires,
-            condition,
-            Age,
-        } = req.body;
-        const salt = await bcrypt.genSalt();
-        const passwordHash = await bcrypt.hash(password, salt);
-        console.log(Age);
+// export const registerR = async (req, res) => {
+//     try {
+//         const {
+//             firstName,
+//             lastName,
+//             email,
+//             password,
+//             picturePath,
+//             friends,
+//             location,
+//             occupation,
+//             bloodgroup,
+//             requires,
+//             condition,
+//             Age,
+//         } = req.body;
+//         const salt = await bcrypt.genSalt();
+//         const passwordHash = await bcrypt.hash(password, salt);
+//         console.log(Age);
 
-        const newUser1 = new Recipient({
-            firstName,
-            lastName,
-            email,
-            password: passwordHash,
-            picturePath,
-            friends,
-            location,
-            occupation,
-            viewedProfile: Math.floor(Math.random() * 1000),
-            impressions: Math.floor(Math.random() * 1000),
-            bloodgroup,
-            requires,
-            condition,
-            Age,
-        });
-        const savedUser = await newUser1.save();
-        res.status(201).json(savedUser);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-        // console.log(req.body);
+//         const newUser1 = new Recipient({
+//             firstName,
+//             lastName,
+//             email,
+//             password: passwordHash,
+//             picturePath,
+//             friends,
+//             location,
+//             occupation,
+//             viewedProfile: Math.floor(Math.random() * 1000),
+//             impressions: Math.floor(Math.random() * 1000),
+//             bloodgroup,
+//             requires,
+//             condition,
+//             Age,
+//         });
+//         const savedUser = await newUser1.save();
+//         res.status(201).json(savedUser);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//         // console.log(req.body);
 
-    }
-}
+//     }
+// }
 //Logging 
 
 export const login = async (req, res) => {

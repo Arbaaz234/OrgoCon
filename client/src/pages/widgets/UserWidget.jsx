@@ -18,7 +18,7 @@ const UserWidget = (userId) => {
     const main = palette.neutral.main;
 
     const getUser = async () => {
-        // console.log(userId.userId);
+        console.log(userId.userId);
         const response = await fetch(`http://localhost:3001/users/${userId.userId}`,
             {
                 method: 'GET',

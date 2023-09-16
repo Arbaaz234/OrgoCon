@@ -3,6 +3,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Button, IconButton, Popover, Stack } from "@mui/material";
 import Modal from "components/Modal";
 import UserImage from "components/UserImage";
+import FriendListWidget from "pages/widgets/FriendsList";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setChatOpen } from "state";
@@ -31,6 +32,7 @@ const chats = [
 ];
 
 function ChatPopup({ name, avatar }) {
+  const { _id, picturePath } = useSelector((state) => state.user);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (e) => {
@@ -67,7 +69,8 @@ function ChatPopup({ name, avatar }) {
         }}
       >
         <Modal>
-          {chats.map((chat, i) => (
+          <FriendListWidget userId={_id} />
+          {/* {chats.map((chat, i) => (
             <>
               <Modal.Open opens={chat.name}>
                 <Button
@@ -97,7 +100,7 @@ function ChatPopup({ name, avatar }) {
                 </div>
               </Modal.Window>
             </>
-          ))}
+          ))} */}
         </Modal>
       </Popover>
     </div>

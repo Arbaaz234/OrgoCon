@@ -8,7 +8,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import { register,registerR } from "./controllers/auth.js";
+import { register } from "./controllers/auth.js";
 import authRoutes from './routes/auth.js';
 import userRoutes from "./routes/users.js";
 import { verifyToken } from "./middleware/auth.js";
@@ -46,7 +46,7 @@ const upload = multer({ storage });
 //routes=files
 
 app.post("/auth/register", upload.single("picture"), register)
-app.post("/auth/registerR", upload.single("picture"), registerR)
+// app.post("/auth/registerR", upload.single("picture"), registerR)
 
 app.post("/post", verifyToken, upload.single("picture"), createPost)
 //routes without fikes
