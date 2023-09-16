@@ -18,7 +18,9 @@ import User from './models/User.js';
 import Post from './models/Post.js';
 import Recipient from './models/Recipient.js'
 import { users, posts } from './data/index.js';
-
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import messagesroute from "./routes/messagesroute.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,6 +59,7 @@ app.use("/users", userRoutes);
 
 app.use("/posts", postRoutes);
 
+app.use("/chats", messagesroute);
 
 //Mongoose setup
 
@@ -69,4 +72,5 @@ mongoose.connect(process.env.MONGO_URL, {
 
     // User.insertMany(users);
     // Post.insertMany(posts);
-}).catch((error) => console.log(`did not connect to ${port} with ${error.message}`));   
+}).catch((error) => console.log(`did not connect to ${port} with ${error.message}`));
+
