@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const userschema = new mongoose.Schema({
-    firstName: {
+const recipientSchema = mongoose.Schema(
+    {
+        firstName: {
         type: String,
         required: true,
         min: 2,
@@ -32,11 +33,10 @@ const userschema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-    isRecipient: Boolean,
-    requires: String,
-    condition: String,
-    bloodgroup: String,
-    Age: Number,
+    bloodgroup:String,
+    requires:String,
+    condition:String,
+    Age:Number,
     location: String,
     occupation: String,
     viewedProfile: Number,
@@ -44,6 +44,7 @@ const userschema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-const User = mongoose.model("User", userschema);
+
+const Recipient = mongoose.model("recipients", recipientSchema);
 mongoose.set('debug', true);
-export default User;
+export default Recipient;

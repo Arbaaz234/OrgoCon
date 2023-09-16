@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Typography, Button, TextField, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Typography, Button, TextField, useMediaQuery, useTheme, RadioGroup, Radio, FormControlLabel, Checkbox } from '@mui/material'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Formik } from 'formik';
 import * as yup from "yup";
@@ -31,7 +31,11 @@ const initialValuesRegister = {
     email: "",
     password: "",
     location: "",
-    picture: ""
+    picture: "",
+    bloodgroup: "",
+    Age: "",
+    condition: "",
+    requires: "",
 }
 
 const initialValuesLogin = {
@@ -49,13 +53,20 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType === "Login";
     const isRegister = pageType === "Register";
+    const [checkReDo, setReDo] = useState(false);
+    const CheckedRedo = async () => {
+        setReDo(!checkReDo);
+    }
     const register = async (values, onSubmitProps) => {
         const formData = new FormData();
         for (let value in values) {
             formData.append(value, values[value]);
 
         }
+
         formData.append('picturePath', values.picture.name);
+        console.log(checkReDo);
+
         const saveUserResponse = await fetch(
             "http://localhost:3001/auth/register", {
             method: 'POST',
@@ -67,6 +78,9 @@ const Form = () => {
         if (savedUser) {
             setPageType("Login");
         }
+
+
+
     }
 
     const login = async (values, onSubmitProps) => {
@@ -188,6 +202,51 @@ const Form = () => {
                                     helperText={touched.occupation && errors.occupation}
                                     sx={{ gridColumn: "span 4" }}
                                 />
+                                <TextField
+                                    label="BloodGroup"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.bloodgroup}
+                                    name="bloodgroup"
+                                    error={Boolean(touched.bloodgroup) && Boolean(errors.bloodgroup)}
+                                    helperText={touched.bloodgroup && errors.bloodgroup}
+                                    sx={{ gridColumn: "span 2" }}
+                                />
+                                <TextField
+                                    label="Age"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.Age}
+                                    name="Age"
+                                    error={Boolean(touched.Age) && Boolean(errors.Age)}
+                                    helperText={touched.Age && errors.Age}
+                                    sx={{ gridColumn: "span 2" }}
+                                />
+                                <FormControlLabel control={<Checkbox />} onChange={CheckedRedo} label="Recipient" />
+                                {checkReDo && (
+                                    <>
+                                        <TextField
+                                            label="Condition"
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                            value={values.condition}
+                                            name="condition"
+                                            error={Boolean(touched.condition) && Boolean(errors.condition)}
+                                            helperText={touched.condition && errors.condition}
+                                            sx={{ gridColumn: "span 2" }}
+                                        />
+                                        <TextField
+                                            label="Requires"
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                            value={values.requires}
+                                            name="requires"
+                                            error={Boolean(touched.requires) && Boolean(errors.requires)}
+                                            helperText={touched.requires && errors.requires}
+                                            sx={{ gridColumn: "span 2" }}
+                                        /></>
+                                )}
+
                                 <Box
                                     gridColumn="span 4"
                                     border={`1px solid ${palette.neutral.medium}`}
