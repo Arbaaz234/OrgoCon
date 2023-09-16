@@ -7,18 +7,19 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-const UserWidget = () => {
+const UserWidget = (userId) => {
     const [user, setUser] = useState(null);
     const { palette } = useTheme();
     const navigate = useNavigate();
     const token = useSelector((state) => state.token);
-    const { _id } = useSelector((state) => state.user)
+
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
 
     const getUser = async () => {
-        const response = await fetch(`http://localhost:3001/users/${_id}`,
+        // console.log(userId.userId);
+        const response = await fetch(`http://localhost:3001/users/${userId.userId}`,
             {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${token}` }
@@ -26,7 +27,7 @@ const UserWidget = () => {
         );
         const data = await response.json();
         setUser(data);
-
+        console.log(data);
     }
 
     useEffect(() => {
@@ -44,11 +45,14 @@ const UserWidget = () => {
         impressions,
         picturePath,
         friends,
+        isRecipient,
+        condition,
+        requires,
     } = user;
     // console.log(user);
     return (
         <WidgetWrapper>
-            <FlexBetween gap="0.5rem" pb="1.1rem" onClick={() => navigate(`/profile/${_id}`)}>
+            <FlexBetween gap="0.5rem" pb="1.1rem" onClick={() => navigate(`/profile/${userId}`)}>
                 <FlexBetween gap="1rem">
                     <UserImage image={picturePath} />
                     <Box>
@@ -75,7 +79,11 @@ const UserWidget = () => {
                 </Box>
                 <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
                     <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />
-                    <Typography color={medium}>{occupation}</Typography>
+                    <Typography color={medium}>{condition}</Typography>
+
+                </Box>
+                <Box>
+                    <Typography color={medium}>Requires : {requires}</Typography>
                 </Box>
             </Box>
             <Divider />

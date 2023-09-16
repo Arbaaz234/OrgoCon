@@ -22,6 +22,7 @@ const PostWidget = ({
     userPicturePath,
     likes,
     comments,
+
 }) => {
     const navigate = useNavigate();
     const [isComments, setIsComments] = useState(false);
@@ -56,6 +57,7 @@ const PostWidget = ({
                 name={name}
                 subtitle={location}
                 userPicturePath={userPicturePath}
+
             />
             <Typography color={main} sx={{ mt: "1rem" }}>
                 {description}
@@ -79,7 +81,7 @@ const PostWidget = ({
                                 <FavoriteBorderOutlined />
                             )}
                         </IconButton>
-                        <Typography>{likeCount}</Typography>
+                        <Typography>Interested {likeCount}</Typography>
                     </FlexBetween>
 
                     <FlexBetween gap="0.3rem">
