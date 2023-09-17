@@ -13,29 +13,28 @@ function ChatContainer({ currentChat, socket }) {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const token = useSelector((state) => state.token);
   const getMessages = useCallback(async () => {
-    console.log(_id + ' ' + currentChat._id);
-    // const databody = 
+    console.log(_id + " " + currentChat._id);
+    // const databody =
     // console.log(databody);
     const response = await fetch(`http://localhost:3001/chats/getmsgs`, {
       method: "POST",
       // headers: { Authorization: `Bearer ${token}` },
       body: JSON.stringify({
-        "from": _id,
-        "to": currentChat._id
+        from: _id,
+        to: currentChat._id,
       }),
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
     const data = await response.json();
     console.log(data);
     setMessages(data);
-  }, [_id, token, currentChat._id]);
+  }, [_id, currentChat._id]);
 
   useEffect(() => {
     getMessages();
   }, [currentChat, getMessages]);
-
 
   const handleSendMsg = async (msg) => {
     const data = await JSON.parse(
@@ -78,8 +77,8 @@ function ChatContainer({ currentChat, socket }) {
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "stretch",
-            justifyContent: "stretch",
+            // alignItems: "start",
+            // justifyContent: "stretch",
             height: "100%",
           }}
         >
@@ -104,16 +103,40 @@ function ChatContainer({ currentChat, socket }) {
               flexGrow: "1",
               flexBasis: "100%",
               flex: "1",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              maxWidth: "100%",
             }}
           >
             {messages?.map((message) => {
               return (
-                <div ref={scrollRef} key={message.id}>
+                <div
+                  ref={scrollRef}
+                  key={message.id}
+                  style={{
+                    padding: "4px 8px",
+                  }}
+                >
                   <div
-                    className={`message ${message.fromSelf ? "sended" : "recieved"
-                      }`}
+                    className={`message ${
+                      message.fromSelf ? "sended" : "recieved"
+                    }`}
+                    style={{
+                      display: "flex",
+                      justifyContent: message.fromSelf ? "end" : "start",
+                    }}
                   >
-                    <div className="content ">
+                    <div
+                      className="content"
+                      style={{
+                        padding: "4px 8px",
+                        width: "max-content",
+                        maxWidth: "70%",
+                        borderRadius: "12px",
+                        backgroundColor: message.fromSelf ? "#ddd" : "#eee",
+                      }}
+                    >
                       <p>{message.message}</p>
                     </div>
                   </div>
