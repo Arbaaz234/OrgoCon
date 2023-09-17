@@ -18,9 +18,10 @@ import User from './models/User.js';
 import Post from './models/Post.js';
 import Recipient from './models/Recipient.js'
 import { users, posts } from './data/index.js';
-import { Server } from 'socket.io';
+import { Socket } from 'socket.io';
 import { createServer } from 'http';
 import messagesroute from "./routes/messagesroute.js";
+// import { server } from 'socket.io';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,14 +63,19 @@ app.use("/posts", postRoutes);
 app.use("/chats", messagesroute);
 
 //Mongoose setup
-
+let server;
 const port = process.env.PORT || 6001;
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
-    app.listen(port, () => console.log(`Server Port: ${port}`));
-
+    server = app.listen(port, () => console.log(`Server Port: ${port}`));
+    const io = Socket(server, {
+        cors: {
+            origin: "http://localhost:3001",
+            credentials: true,
+        },
+    });
     // User.insertMany(users);
     // Post.insertMany(posts);
 }).catch((error) => console.log(`did not connect to ${port} with ${error.message}`));

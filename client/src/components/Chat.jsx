@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenChat } from "state";
 import CloseIcon from "@mui/icons-material/Close";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import ChatContainer from "./ChatContainer";
-
+import { io } from "socket.io-client";
 function Chat() {
   const dispatch = useDispatch();
   const { open, id } = useSelector((state) => state.openChat);
   const token = useSelector((state) => state.token);
-
+  const socket = useRef();
   const [other, setOther] = useState({});
 
   const getFriend = useCallback(async () => {
@@ -23,11 +23,16 @@ function Chat() {
   useEffect(
     function () {
       getFriend();
-      console.log("other");
+      console.log(other);
     },
     [getFriend]
   );
-
+  useEffect(() => {
+    if (other) {
+      socket.current = io("http://localhost:3001");
+      socket.current.emit("add-user", other._id);
+    }
+  }, [other]);
   if (open)
     return (
       <div>
@@ -59,7 +64,7 @@ function Chat() {
           </button>
           {/* <UserImage image={userPicturePath} size="55px" /> */}
           {/* {other?.firstName} */}
-          <ChatContainer currentChat={other} />
+          <ChatContainer currentChat={other} socket={socket} />
         </div>
         <div
           style={{

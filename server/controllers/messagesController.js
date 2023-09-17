@@ -17,7 +17,7 @@ export const addMessage = async (req, res, next) => {
 export const getAllMessage = async (req, res, next) => {
     try {
         const { from, to } = req.body;
-
+        console.log(req.body);
         const messages = await Message.find({
             users: {
                 $all: [from, to],
@@ -32,6 +32,8 @@ export const getAllMessage = async (req, res, next) => {
         });
         res.json(projectedMessages);
     } catch (ex) {
-        next(ex);
+        console.log(req.body);
+        console.log(ex);
+        res.json(ex.message);
     }
 };
