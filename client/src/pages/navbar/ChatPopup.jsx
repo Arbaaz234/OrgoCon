@@ -68,9 +68,9 @@ function ChatPopup({ name, avatar }) {
           minWidth: "500px",
         }}
       >
-        <Modal>
-          <FriendListWidget userId={_id} />
-          {/* {chats.map((chat, i) => (
+        {/* <Modal> */}
+        <FriendListWidget userId={_id} onClose={handleClose} />
+        {/* {chats.map((chat, i) => (
             <>
               <Modal.Open opens={chat.name}>
                 <Button
@@ -101,7 +101,7 @@ function ChatPopup({ name, avatar }) {
               </Modal.Window>
             </>
           ))} */}
-        </Modal>
+        {/* </Modal> */}
       </Popover>
     </div>
   );

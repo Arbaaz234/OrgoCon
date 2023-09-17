@@ -2,98 +2,104 @@ import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFriends } from "state";
+import { setFriends, setOpenChat } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
-import Modal from "./Modal";
-import MessageIcon from '@mui/icons-material/Message';
-const Friend = ({ friendId, name, subtitle, userPicturePath, age }) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { _id } = useSelector((state) => state.user);
-    const token = useSelector((state) => state.token);
-    const friends = useSelector((state) => state.user.friends);
-    const Age = useSelector((state) => state.user.Age);
-    const { palette } = useTheme();
-    const primaryLight = palette.primary.light;
-    const primaryDark = palette.primary.dark;
-    const main = palette.neutral.main;
-    const medium = palette.neutral.medium;
+import MessageIcon from "@mui/icons-material/Message";
+import Chat from "./Chat";
 
-    const isFriend = friends.find((friend) => friend._id === friendId);
+const Friend = ({
+  friendId,
+  name,
+  subtitle,
+  userPicturePath,
+  age,
+  onClose,
+}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { _id } = useSelector((state) => state.user);
+  const token = useSelector((state) => state.token);
+  const friends = useSelector((state) => state.user.friends);
+  const Age = useSelector((state) => state.user.Age);
+  const { palette } = useTheme();
+  const primaryLight = palette.primary.light;
+  const primaryDark = palette.primary.dark;
+  const main = palette.neutral.main;
+  const medium = palette.neutral.medium;
 
-    const patchFriend = async () => {
-        const response = await fetch(
-            `http://localhost:3001/users/${_id}/${friendId}`,
-            {
-                method: "PATCH",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-        const data = await response.json();
-        dispatch(setFriends({ friends: data }));
-    };
+  const isFriend = friends.find((friend) => friend._id === friendId);
 
-    return (
-        <FlexBetween>
-            <FlexBetween gap="1rem">
-                <UserImage image={userPicturePath} size="55px" />
-                <Box
-                    onClick={() => {
-                        navigate(`/profile/${friendId}`);
-                        navigate(0);
-                    }}
-                >
-                    <Typography
-                        color={main}
-                        variant="h5"
-                        fontWeight="500"
-                        sx={{
-                            "&:hover": {
-                                color: palette.primary.light,
-                                cursor: "pointer",
-                            },
-                        }}
-                    >
-                        {name}
-                    </Typography>
-                    <Typography color={medium} fontSize="0.75rem">
-                        {subtitle}
-                    </Typography>
-                </Box>
-
-            </FlexBetween>
-            <Box>{Age}</Box>
-            <Modal>
-                <Modal.Open opens={_id}>
-                    <IconButton
-
-                        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-                    >
-
-                        <MessageIcon sx={{ color: primaryDark }} />
-                    </IconButton>
-                </Modal.Open>
-                <Modal.Window name={_id}>
-                    <div>{name}</div>
-                </Modal.Window>
-            </Modal>
-
-            <IconButton
-                onClick={() => patchFriend()}
-                sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
-            >
-                {isFriend ? (
-                    <PersonRemoveOutlined sx={{ color: primaryDark }} />
-                ) : (
-                    <PersonAddOutlined sx={{ color: primaryDark }} />
-                )}
-            </IconButton>
-        </FlexBetween>
+  const patchFriend = async () => {
+    const response = await fetch(
+      `http://localhost:3001/users/${_id}/${friendId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
+    const data = await response.json();
+    dispatch(setFriends({ friends: data }));
+  };
+
+  return (
+    <FlexBetween>
+      <FlexBetween gap="1rem">
+        <UserImage image={userPicturePath} size="55px" />
+        <Box
+          onClick={() => {
+            navigate(`/profile/${friendId}`);
+            navigate(0);
+          }}
+        >
+          <Typography
+            color={main}
+            variant="h5"
+            fontWeight="500"
+            sx={{
+              "&:hover": {
+                color: palette.primary.light,
+                cursor: "pointer",
+              },
+            }}
+          >
+            {name}
+          </Typography>
+          <Typography color={medium} fontSize="0.75rem">
+            {subtitle}
+          </Typography>
+        </Box>
+      </FlexBetween>
+      <Box>{Age}</Box>
+      {/* <Modal> */}
+
+      <IconButton
+        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+        onClick={() => {
+          dispatch(setOpenChat({ open: true, id: friendId }));
+          onClose?.();
+        }}
+      >
+        <MessageIcon sx={{ color: primaryDark }} />
+      </IconButton>
+
+      {/* </Modal> */}
+
+      <IconButton
+        onClick={() => patchFriend()}
+        sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
+      >
+        {isFriend ? (
+          <PersonRemoveOutlined sx={{ color: primaryDark }} />
+        ) : (
+          <PersonAddOutlined sx={{ color: primaryDark }} />
+        )}
+      </IconButton>
+    </FlexBetween>
+  );
 };
 
 export default Friend;
