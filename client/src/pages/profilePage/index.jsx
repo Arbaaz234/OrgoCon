@@ -21,6 +21,7 @@ const ProfilePage = () => {
             headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
+        // alert(data);
         setUser(data);
     };
 
@@ -41,9 +42,9 @@ const ProfilePage = () => {
                 justifyContent="center"
             >
                 <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-                    <UserWidget userId={userId} />
+                    <UserWidget userId={user._id} />
                     <Box m="2rem 0" />
-                    <FriendListWidget userId={userId} />
+                    <FriendListWidget userId={user._id} />
                 </Box>
                 <Box
                     flexBasis={isNonMobileScreens ? "42%" : undefined}
@@ -51,7 +52,7 @@ const ProfilePage = () => {
                 >
                     <MyPostWidget picturePath={user.picturePath} />
                     <Box m="2rem 0" />
-                    <PostsWidget userId={userId} isProfile={true} />
+                    <PostsWidget userId={user._id} isProfile={true} />
                 </Box>
             </Box>
         </Box>

@@ -74,8 +74,25 @@ mongoose.connect(process.env.MONGO_URL, {
         cors: {
             origin: "http://localhost:3001",
             credentials: true,
+            methods: ["GET", "POST"]
         },
     });
+    global.onlineUsers = new Map();
+    io.on("connection", (socket) => {
+        console.log(socket);
+        global.chatSocket = socket;
+        socket.on("add-user", (userId) => {
+            onlineUsers.set(userId, socket.id);
+        })
+        socket.on("send-msg", (msg) => {
+            const sendUserSocket = onlineUsers.get(msg.toString());
+            if (sendUserSocket) {
+                socket.to(sendUserSocket).emit("message-recieve", data.msg);
+            }
+        })
+
+
+    })
     // User.insertMany(users);
     // Post.insertMany(posts);
 }).catch((error) => console.log(`did not connect to ${port} with ${error.message}`));

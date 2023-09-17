@@ -31,6 +31,7 @@ function Chat() {
     if (other) {
       socket.current = io("http://localhost:3001");
       socket.current.emit("add-user", other._id);
+      console.log(socket.current);
     }
   }, [other]);
   if (open)
